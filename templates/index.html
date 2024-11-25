@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Добро пожаловать в Орнитологическую платформу!</h1>
+    <p class="lead">Платформа для исследователей и любителей птиц. Здесь вы можете вести учет наблюдений за птицами, делиться своими находками и изучать информацию о различных видах птиц.</p>
+    <hr class="my-4">
+    {% if not current_user.is_authenticated %}
+    <p>Для добавления наблюдений необходимо войти в систему.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Войти</a>
+    {% else %}
+    <a class="btn btn-primary btn-lg" href="{{ url_for('add_observation') }}" role="button">Добавить наблюдение</a>
+    {% endif %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Каталог птиц</h5>
+                <p class="card-text">Изучайте информацию о различных видах птиц, их местах обитания и особенностях.</p>
+                <a href="{{ url_for('birds') }}" class="btn btn-primary">Перейти к каталогу</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Наблюдения</h5>
+                <p class="card-text">Просматривайте наблюдения других исследователей и делитесь своими.</p>
+                <a href="{{ url_for('observations') }}" class="btn btn-primary">Смотреть наблюдения</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Добавить наблюдение</h5>
+                <p class="card-text">Внесите информацию о своих наблюдениях за птицами.</p>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('add_observation') }}" class="btn btn-primary">Добавить наблюдение</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Войти для добавления</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2>Последние наблюдения</h2>
+    <div class="row">
+        {% for observation in observations[:3] %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if observation.image_url %}
+                <img src="{{ observation.image_url }}" class="card-img-top" alt="{{ observation.bird.species }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ observation.bird.species }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">{{ observation.date.strftime('%d.%m.%Y') }}</small><br>
+                        Место: {{ observation.location }}<br>
+                        Наблюдатель: {{ observation.observer.username }}
+                    </p>
+                    <p class="card-text">{{ observation.notes[:100] }}{% if observation.notes|length > 100 %}...{% endif %}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

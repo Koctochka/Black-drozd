@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1>Добавить новое наблюдение</h1>
+        <form method="POST" class="mt-4">
+            <div class="mb-3">
+                <label for="bird_id" class="form-label">Вид птицы</label>
+                <select class="form-select" id="bird_id" name="bird_id" required>
+                    <option value="">Выберите вид птицы</option>
+                    {% for bird in birds %}
+                    <option value="{{ bird.id }}">{{ bird.species }} ({{ bird.scientific_name }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Место наблюдения</label>
+                <input type="text" class="form-control" id="location" name="location" 
+                       placeholder="Например: Парк Горького, Москва" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Заметки</label>
+                <textarea class="form-control" id="notes" name="notes" rows="4" 
+                          placeholder="Опишите ваши наблюдения, поведение птицы, условия и другие важные детали"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="image_url" class="form-label">URL изображения</label>
+                <input type="url" class="form-control" id="image_url" name="image_url" 
+                       placeholder="https://example.com/image.jpg">
+                <div class="form-text">Добавьте ссылку на фотографию птицы (необязательно)</div>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Сохранить наблюдение</button>
+                <a href="{{ url_for('observations') }}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

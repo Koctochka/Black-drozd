@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Наблюдения за птицами</h1>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('add_observation') }}" class="btn btn-primary">Добавить новое наблюдение</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    {% for observation in observations %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            {% if observation.image_url %}
+            <img src="{{ observation.image_url }}" class="card-img-top" alt="{{ observation.bird.species }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ observation.bird.species }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ observation.bird.scientific_name }}</h6>
+                <p class="card-text">
+                    <strong>Дата:</strong> {{ observation.date.strftime('%d.%m.%Y %H:%M') }}<br>
+                    <strong>Место:</strong> {{ observation.location }}<br>
+                    <strong>Наблюдатель:</strong> {{ observation.observer.username }}
+                </p>
+                {% if observation.notes %}
+                <div class="card-text">
+                    <strong>Заметки:</strong><br>
+                    {{ observation.notes }}
+                </div>
+                {% endif %}
+            </div>
+            {% if current_user.is_authenticated and current_user.id == observation.user_id %}
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="{{ url_for('edit_observation', id=observation.id) }}" class="btn btn-sm btn-outline-primary">
+                        Редактировать
+                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                            onclick="if(confirm('Вы уверены, что хотите удалить это наблюдение?')) {
+                                window.location.href='{{ url_for('delete_observation', id=observation.id) }}';
+                            }">
+                        Удалить
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="col">
+        <div class="alert alert-info">
+            Пока нет добавленных наблюдений.
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('add_observation') }}">Добавить первое наблюдение</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Войдите</a>, чтобы добавить наблюдение.
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
