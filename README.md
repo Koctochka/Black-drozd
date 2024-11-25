@@ -68,34 +68,3 @@ Black-drozd/
     ├── login.html
     └── register.html
 ```
-
-## Развертывание
-
-1. Создайте аккаунт на GitHub если его еще нет
-2. Создайте новый репозиторий
-3. Загрузите код в репозиторий:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/Black-drozd.git
-git push -u origin main
-```
-
-## Лицензия
-
-MIT
-
-## Авторы
-
-- Ваше имя
-
-## Вклад в проект
-
-Если вы хотите внести свой вклад в проект:
-
-1. Создайте форк репозитория
-2. Создайте ветку для новой функциональности
-3. Создайте pull request
